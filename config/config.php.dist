@@ -1,0 +1,156 @@
+<?php
+
+# Log settings
+$config['log']['level'] = 'DEBUG';
+$config['log']['filename'] = 'certgen.log';
+
+# Directory settings
+$config['dir']['base'] = DIR_BASE;
+$config['dir']['config'] = DIR_BASE . 'config/';
+$config['dir']['log'] = DIR_BASE . 'log/';
+$config['dir']['cnf'] = DIR_BASE . 'files/cnf/';
+$config['dir']['key'] = DIR_BASE . 'files/key/';
+$config['dir']['crt'] = DIR_BASE . 'files/crt/';
+$config['dir']['csr'] = DIR_BASE . 'files/csr/';
+$config['dir']['pdf'] = DIR_BASE . 'files/pdf/';
+$config['dir']['data'] = DIR_BASE . 'files/data/';
+$config['dir']['todo']['csr'] = DIR_BASE . 'files/todo/csr/';
+$config['dir']['todo']['cnf'] = DIR_BASE . 'files/todo/cnf/';
+$config['dir']['todo']['dfn'] = DIR_BASE . 'files/todo/dfn/';
+$config['dir']['backup'] = DIR_BASE . 'files/backup/';
+$config['dir']['currentkey'] = '/path/to/private-key-directory/';
+$config['dir']['currentcrt'] = '/path/to/public-key-directory/';
+$config['dir']['currentchain'] = '/path/to/chain-directory/';
+
+# URL for SoapClient
+$config['tls']['soap'] = array(
+	'url' => 'https://pki.pca.dfn.de/dfn-ca-global-g2/cgi-bin/pub/soap?wsdl=DFNCERT::Public',
+);
+
+# TLS Settings
+
+## CSR
+$config['tls']['req'] = [
+	'RaID' => 0, # DFN-CA RaID
+	'Role' => 'Web Server',
+	'Pin' => 'changeme', # SHA1 Hash of Pin
+	'AddEmail' => 'webmaster@example.invalid',
+	'AddOrgUnit' => 'Example Corp.',
+	'Publish' => true
+];
+$config['tls']['csr']['configargs'] = [
+	'digest_alg'=> 'sha256',
+	'private_key_type' => OPENSSL_KEYTYPE_RSA,
+	'digest_alg' => 'sha256',
+	'x509_extensions' => 'v3_ca',
+	'private_key_bits' => 4096,
+	'encrypt_key' => false,
+	'server_cert_extensions' => [
+		'basicConstraints' => 'CA:FALSE',
+		'nsCertType' => 'server',
+		'subjectKeyIdentifier' => 'hash',
+	],
+];
+
+## Private key
+$config['tls']['pkey'] = [
+	'digest_alg' => 'sha256',
+	'private_key_bits' => 4096,
+	'private_key_type' => OPENSSL_KEYTYPE_RSA,
+	'encrypt_key' => FALSE,
+];
+
+## Organisation
+$config['tls']['dn'] = [
+	"countryName"			=> "DE",
+	"stateOrProvinceName"		=> "Bundesland",
+	"organizationName"		=> "Name der Organisation",
+	"organizationalUnitName"	=> "Rechenzentrum",
+	"emailAddress"			=> "webmaster@example.invalid"
+];
+
+$config['tls']['min_validity'] = 60;
+
+# CLI options for commands in bin/
+$config['cli']['options']['fetch_cnf'] = 'nd:i:s:t:';
+$config['cli']['options']['parse_crt'] = 'nd:i:s:';
+$config['cli']['options']['check_crt'] = 'nd:i:s:t:';
+$config['cli']['options']['push_csr'] = 'r:';
+$config['cli']['options']['pull_dfncrt'] = 'nai:';
+$config['cli']['question']['overwrite'] = 'Datei überschreiben? (j|y)';
+
+# Usage instructions for commands in bin/
+$config['language']['usage']['fetch_cnf'] = 
+"Holt die openssl.cnf-Dateien für die unten spezifizierten Filter:
+Aufruf: " . CMD_NAME . " [OPTION]... 
+\t-d\tDomainname
+\t-i\tWebauftritt-ID
+\t-s\tWebauftritt-Status:
+\t\t3: Einrichtungsphase
+\t\t4: In Betrieb
+\t-t\tWebauftritt-Typ:
+\t\t1: Webcluster
+\t\t2: Wiki
+\t\t18: CMS-Instanz
+\t-h\tDiese Hilfe anzeigen und beenden
+";
+
+$config['language']['usage']['check_crt'] = 
+"Überprüft die Zertifikate für die unten spezifizierten Filter:
+Aufruf: " . CMD_NAME . " [OPTION]... 
+\t-d\tDomainname
+\t-i\tWebauftritt-ID
+\t-s\tWebauftritt-Status:
+\t\t3: Einrichtungsphase
+\t\t4: In Betrieb
+\t-t\tWebauftritt-Typ:
+\t\t1: Webcluster
+\t\t2: Wiki
+\t\t18: CMS-Instanz
+\t-h\tDiese Hilfe anzeigen und beenden
+";
+
+$config['language']['usage']['parse_crt'] = 
+"Aufruf: " . CMD_NAME . " [OPTION]... 
+\t-d\tDomain angeben, deren Zertifikat analyisert werden soll
+\t-i\tDomain-ID angeben, deren Zertifikat analyisert werden soll
+\t-h\tDiese Hilfe anzeigen und beenden
+";
+
+$config['language']['usage']['push_csr'] = 
+"Aufruf: " . CMD_NAME . " [OPTION]... 
+\t-r\tregenerate key:
+\t\tno: vorhandener Private-Key wird wiederverwendet
+\t\tyes: neuer Private-Key wird erzeugt
+\t-h\tDiese Hilfe anzeigen und beenden
+";
+
+$config['language']['usage']['pull_dfncrt'] = 
+"Aufruf: " . CMD_NAME . " (-a|-i [serial]) [OPTION]... 
+\t-n\tdry run
+\t-a\tAlle ausstehenden Requests durchgehen
+\t-i\tRequest mit angegebener Id holen
+\t-h\tDiese Hilfe anzeigen und beenden
+";
+
+$config['differ'] = [
+	'header' => 
+'Dateien unterscheiden sich!
+--- original
++++ neu
+',
+	'line_numbers' => true
+];
+
+# Settings for RRZE data source
+$config['wmp']['data_source'] = 'https://dev.wmp.rrze.fau.de/api/ca/domains';
+
+# initialize colours
+define('LIGHT_RED', "\033[1;31m");
+define('LIGHT_GREEN', "\033[1;32m");
+define('LIGHT_CYAN', "\033[1;36m");
+define('RED', "\033[0;31m");
+define('GREEN', "\033[0;32m");
+define('CYAN', "\033[0;36m");
+define('YELLOW', "\033[1;33m");
+define('NC', "\033[0m");
