@@ -1,0 +1,14 @@
+/vendor/*
+/files/key/*
+/files/cnf/*
+/files/csr/*
+/files/crt/*
+/files/pdf/*
+/files/todo/cnf/*
+/files/todo/csr/*
+/files/todo/dfn/*
+/files/backup/*
+/config/config.php
+/composer.lock
+/log/*
+.idea/

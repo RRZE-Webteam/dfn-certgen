@@ -1,0 +1,22 @@
+{
+    "description": "RRZE certgen",
+    "name": "rrze/certgen",
+    "license": "GPL-2.0-only",
+    "autoload": {
+        "psr-4": {"RRZE\\": "src/rrze/"}
+    },
+    "require-dev": {
+        "pds/skeleton": "^1.0"
+    },
+    "require": {
+        "sebastian/diff": "^3.0",
+        "monolog/monolog": "^1.23",
+        "phpseclib/phpseclib": "~2.0",
+        "phpmailer/phpmailer": "^6.0",
+        "ext-openssl": "*",
+        "ext-json": "*",
+        "ext-posix": "*",
+        "ext-soap": "*",
+        "ext-curl": "*"
+    }
+}
