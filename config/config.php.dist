@@ -143,7 +143,7 @@ $config['differ'] = [
 ];
 
 # Settings for RRZE data source
-$config['wmp']['data_source'] = 'https://dev.wmp.rrze.fau.de/api/ca/domains';
+$config['wmp']['data_source'] = 'https://example.invalid/api';
 
 # initialize colours
 define('LIGHT_RED', "\033[1;31m");
